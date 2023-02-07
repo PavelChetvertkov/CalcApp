@@ -1,0 +1,42 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.CalcApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorSecondaryVariant">@color/teal_700</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:statusBarColor" tools:targetApi="21">?attr/colorPrimaryVariant</item>
+        <!-- Customize your theme here. -->
+    </style>
+
+    <style name="commonButton" parent="Widget.MaterialComponents.ExtendedFloatingActionButton">
+        <item name="android:layout_width">70dp</item>
+        <item name="android:layout_height">70dp</item>
+        <item name="cornerRadius">35dp</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_margin">12dp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="operatorButton" parent="commonButton">
+        <item name="backgroundTint">@color/buttonOperator</item>
+    </style>
+
+    <style name="digitButton" parent="commonButton">
+        <item name="backgroundTint">@color/buttonDigits</item>
+    </style>
+
+    <style name="remainingButton" parent="commonButton">
+        <item name="backgroundTint">@color/buttonRemaining</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+</resources>
