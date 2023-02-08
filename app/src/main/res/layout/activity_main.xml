@@ -23,11 +23,10 @@
         android:id="@+id/tvResult"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAlignment="textEnd"
         android:text=""
+        android:textAlignment="textEnd"
         android:textColor="@color/black"
         android:textSize="40sp"
-        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         tools:ignore="HardcodedText" />
 

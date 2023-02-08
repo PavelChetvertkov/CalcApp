@@ -7,8 +7,8 @@ import android.view.View
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.example.calcapp.databinding.ActivityMainBinding
-import net.objecthunter.exp4j.Expression
 import net.objecthunter.exp4j.ExpressionBuilder
+import kotlin.math.roundToInt
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -16,9 +16,6 @@ class MainActivity : AppCompatActivity() {
     private var stateError = false
     private var lastDot = false
     private var flag = false
-
-    //connected library
-    private lateinit var expression: Expression
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -116,14 +113,15 @@ class MainActivity : AppCompatActivity() {
         lastDot = true
     }
 
+    //correct?
     private fun onPercentClick() {
-        //
+        binding.tvData.append("/100")
+        onEqual()
     }
 
     private fun onAllClearClick() {
         binding.tvData.text = ""
         binding.tvResult.text = ""
-        binding.tvResult.visibility = View.GONE
         stateError = false
         lastNumeric = false
         lastDot = false
@@ -161,44 +159,35 @@ class MainActivity : AppCompatActivity() {
     private fun onBackspaceClick() {
         binding.tvData.text = binding.tvData.text.dropLast(1)
         try {
-            val lastChar = binding.tvData.text.last()
-            if (lastChar.isDigit()) {
-                onEqual()
-                stateError = false
-                lastDot = false
-                lastNumeric = false
-                flag = false
-            }
+            if (binding.tvData.text.last().isDigit()) onEqual()
         } catch (ex: java.lang.Exception) {
             Log.e("MyLog", "${getString(R.string.error)}: $ex")
-            binding.tvResult.text = ""
-            binding.tvResult.visibility = View.GONE
+            binding.tvResult.text = getString(R.string.error)
         }
     }
 
     private fun onEqualClick() {
         onEqual()
-        //remove the equal sign from the beginning of the string
-        binding.tvData.text = binding.tvResult.text.toString().drop(1)
+        //remove the equal sign from the beginning of the string if no error in result textview
+        if (binding.tvResult.text != getString(R.string.error)) binding.tvData.text =
+            binding.tvResult.text.toString().drop(1)
     }
 
     @SuppressLint("SetTextI18n")
     private fun onEqual() {
-        if (lastNumeric && !stateError) {
-            val txt = binding.tvData.text.toString()
-            expression = ExpressionBuilder(txt).build()
-
+        if (lastNumeric && !stateError && binding.tvData.text.last().isDigit()) {
             try {
-                val result = expression.evaluate()
-                binding.tvResult.visibility = View.VISIBLE
-                if (flag) binding.tvResult.text = "=$result"
+                val result = ExpressionBuilder(binding.tvData.text.toString()).build().evaluate()
+                if (flag)
+                    if (result != result.roundToInt().toDouble()) binding.tvResult.text = "=$result"
+                    //discard zeros from an integer
+                    else binding.tvResult.text = "=%.0f".format(result.toFloat())
             } catch (ex: java.lang.ArithmeticException) {
                 Log.e("MyLog", "${getString(R.string.error)}: $ex")
-                binding.tvResult.text = "${getString(R.string.error)}: $ex"
+                binding.tvResult.text = getString(R.string.error)
                 stateError = false
                 lastDot = false
                 lastNumeric = false
-                flag = false
             }
         }
     }
